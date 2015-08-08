@@ -1,41 +1,38 @@
-'use strict';
+'use strong';
 
-var fs = require('fs');
+const fs = require('fs');
 
-var noop = require('nop');
-var rimrafPromise = require('./');
-var test = require('tape');
+const pathExists = require('path-exists');
+const rimrafPromise = require('./');
+const test = require('tape');
 
-test('rimrafPromise()', function(t) {
-  t.plan(6);
+test('rimrafPromise()', t => {
+  t.plan(7);
 
   fs.writeFileSync('foo', '');
 
-  rimrafPromise('foo')
-    .then(function(res) {
-      t.notOk(fs.existsSync('foo'), 'should remove a file.');
-      t.strictEqual(res, undefined, 'should pass no value to the onFulfilled function.');
-    });
+  rimrafPromise('foo').then(res => {
+    pathExists('foo').then(exists => t.notOk(exists, 'should remove a file.'));
+    t.strictEqual(res, undefined, 'should pass no value to the onFulfilled function.');
+  }).catch(t.fail);
 
-  fs.mkdirSync('bar');
+  rimrafPromise('inde*.js', {disableGlob: true}).then(() => {
+    pathExists('index.js').then(exists => t.ok(exists, 'should support rimraf options.'));
+  }).catch(t.fail);
 
-  rimrafPromise('bar')
-    .then(function() {
-      t.notOk(fs.existsSync('bar'), 'should remove a directory.');
-    });
+  rimrafPromise('/', null).then(t.fail, err => {
+    t.ok(err, 'should be rejected when rimraf cannot remove the target.');
+  }).catch(t.fail);
 
-  rimrafPromise('baz')
-    .then(function() {
-      t.pass('should be fulfilled even if the file doesn\'t exist.');
-    });
+  rimrafPromise().then(t.fail, err => {
+    t.ok(/missing path/.test(err), 'should be rejected when it takes no arguments.');
+  }).catch(t.fail);
 
-  rimrafPromise()
-    .then(noop, function(err) {
-      t.ok(err.message, 'should be rejected when it takes no arguments.');
-    });
+  rimrafPromise(['1'], undefined).then(t.fail, err => {
+    t.ok(/should be a string/.test(err), 'should be rejected when the first argument is not a string.');
+  }).catch(t.fail);
 
-  rimrafPromise(['1'])
-    .catch(function(err) {
-      t.ok(err.message, 'should be rejected when it takes an invalid argument.');
-    });
+  rimrafPromise('foo', false).then(t.fail, err => {
+    t.ok(/missing options/.test(err), 'should be rejected when it takes the non-object second argument.');
+  }).catch(t.fail);
 });

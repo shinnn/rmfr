@@ -1,50 +1,47 @@
 {
   "name": "rimraf-promise",
   "version": "1.0.0",
-  "description": "Promise version of rimraf",
+  "description": "Promises/A+ version of rimraf",
   "repository": "shinnn/rimraf-promise",
   "author": {
     "name": "Shinnosuke Watanabe",
     "url": "https://github.com/shinnn"
   },
   "scripts": {
-    "pretest": "eslint *.js & jscs *.js",
-    "test": "node test.js | tap-spec",
-    "coverage": "istanbul cover test.js",
+    "pretest": "eslint --config @shinnn/node index.js test.js",
+    "test": "node --strong_mode --throw-deprecation --track-heap-objects test.js",
+    "coverage": "istanbul cover --strong_mode test.js",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/shinnn/rimraf-promise/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "files": [
-    "index.js",
-    "LICENSE"
+    "index.js"
   ],
   "keywords": [
     "rimraf",
     "rm",
+    "rmdir",
+    "unlink",
     "remove",
     "clean",
+    "recursive",
+    "glob",
     "file",
     "directory",
+    "promise",
+    "promisified",
     "then",
     "thenable"
   ],
   "dependencies": {
-    "es6-promise": "^2.0.0",
-    "rimraf": "^2.2.8"
+    "rimraf": "^2.4.3"
   },
   "devDependencies": {
-    "eslint": "^0.8.2",
-    "istanbul": "^0.3.2",
-    "istanbul-coveralls": "^1.0.1",
-    "jscs": "^1.7.1",
-    "mkdir": "0.0.2",
-    "nop": "0.0.0",
-    "tap-spec": "^1.0.0",
-    "tape": "^3.0.0"
+    "@shinnn/eslint-config-node": "^1.0.1",
+    "eslint": "^1.5.1",
+    "istanbul": "^0.3.21",
+    "istanbul-coveralls": "^1.0.3",
+    "path-exists": "^2.0.0",
+    "tape": "^4.2.1"
   }
 }

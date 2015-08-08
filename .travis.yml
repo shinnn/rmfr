@@ -1,8 +1,6 @@
+sudo: false
 language: node_js
-node_js:
-  - '0.10'
-  - '0.11'
+node_js: stable
 notifications:
   email: false
-after_script:
-  - npm run-script coveralls
+after_script: npm run-script coveralls

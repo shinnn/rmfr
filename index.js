@@ -1,20 +1,19 @@
-/*!
- * rimraf-promise | MIT (c) Shinnosuke Watanabe
- * https://github.com/shinnn/rimraf-promise
-*/
-
 'use strict';
 
-var ES6Promise = global.Promise || require('es6-promise').Promise;
-var rimraf = require('rimraf');
+const rimraf = require('rimraf');
 
-module.exports = function rimrafPromise(filePath) {
-  return new ES6Promise(function(resolve, reject) {
-    rimraf(filePath, function(err) {
+module.exports = function rimrafPromise(filePath, options) {
+  if (options === undefined || options === null) {
+    options = {};
+  }
+
+  return new Promise(function wrapPromise(resolve, reject) {
+    rimraf(filePath, options, function rimrafCallback(err) {
       if (err) {
         reject(err);
         return;
       }
+
       resolve();
     });
   });
