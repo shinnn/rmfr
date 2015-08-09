@@ -54,9 +54,7 @@ rirmafPromise('path/to/file').then(onFulfilled, onRejected);
 
 ## License
 
-Copyright (c) 2014 - 2015 [Shinnosuke Watanabe](https://github.com/shinnn)
-
-Licensed under [the MIT License](./LICENSE).
+[The Unlicense](./LICENSE)
 
 [rimraf]: https://github.com/isaacs/rimraf
 [promise]: https://promisesaplus.com/
