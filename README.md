@@ -36,12 +36,12 @@ const rimrafPromise = require('rimraf-promise');
 ### rimrafPromise(*path* [, *options*])
 
 *path*: `String` (a file/directory path or glob pattern)  
-*path*: `Object` (rimraf [options](https://github.com/isaacs/rimraf/blob/4d3d9b5f2ddbbaf4ee56be5f8bfecdd4e27f7b34/rimraf.js#L22-L38))  
+*options*: `Object` (rimraf [options](https://github.com/isaacs/rimraf/blob/4d3d9b5f2ddbbaf4ee56be5f8bfecdd4e27f7b34/rimraf.js#L22-L38))  
 Return: `Object` ([Promise][promise])
 
-When it finish removing the target, it will be [*fulfilled*](http://promisesaplus.com/#point-26) with no arguments.
+When it finish removing the target, it will be [*fulfilled*](https://promisesaplus.com/#point-26) with no arguments.
 
-When it fails to remove the target, it will be [*rejected*](http://promisesaplus.com/#point-30) with an error as its first argument. [Here](https://github.com/isaacs/rimraf#api) is the details about how [rimraf][rimraf] handles its error.
+When it fails to remove the target, it will be [*rejected*](https://promisesaplus.com/#point-30) with an error as its first argument. [Here](https://github.com/isaacs/rimraf#api) is the details about how [rimraf][rimraf] handles its error.
 
 ```javascript
 const rirmafPromise = require('rimraf-promise');
