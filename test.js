@@ -20,7 +20,7 @@ test('rimrafPromise()', t => {
     pathExists('index.js').then(exists => t.ok(exists, 'should support rimraf options.'));
   }).catch(t.fail);
 
-  rimrafPromise('/', null).then(t.fail, err => {
+  rimrafPromise('/'.repeat(Number(process.platform !== 'win32')), null).then(t.fail, err => {
     t.ok(err, 'should be rejected when rimraf cannot remove the target.');
   }).catch(t.fail);
 
