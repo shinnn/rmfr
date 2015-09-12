@@ -10,8 +10,7 @@
   "scripts": {
     "pretest": "eslint --config @shinnn/node index.js test.js",
     "test": "node --strong_mode --throw-deprecation --track-heap-objects test.js",
-    "coverage": "istanbul cover --strong_mode test.js",
-    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
+    "coverage": "istanbul cover --strong_mode test.js"
   },
   "license": "MIT",
   "files": [
@@ -38,9 +37,8 @@
   },
   "devDependencies": {
     "@shinnn/eslint-config-node": "^1.0.1",
-    "eslint": "^1.5.1",
-    "istanbul": "^0.3.21",
-    "istanbul-coveralls": "^1.0.3",
+    "eslint": "^1.7.1",
+    "istanbul": "^0.4.0",
     "path-exists": "^2.0.0",
     "tape": "^4.2.1"
   }
