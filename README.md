@@ -4,8 +4,8 @@
 [![Build Status](https://travis-ci.org/shinnn/rimraf-promise.svg?branch=master)](https://travis-ci.org/shinnn/rimraf-promise)
 [![Build status](https://ci.appveyor.com/api/projects/status/sa0vd3nhfiupeu7h?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/rimraf-promise)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/rimraf-promise.svg)](https://coveralls.io/r/shinnn/rimraf-promise)
-[![Dependency Status](https://img.shields.io/david/shinnn/rimraf-promise.svg?label=deps)](https://david-dm.org/shinnn/rimraf-promise)
-[![devDependency Status](https://img.shields.io/david/dev/shinnn/rimraf-promise.svg?label=devDeps)](https://david-dm.org/shinnn/rimraf-promise#info=devDependencies)
+[![Dependency Status](https://david-dm.org/shinnn/rimraf-promise.svg)](https://david-dm.org/shinnn/rimraf-promise)
+[![devDependency Status](https://david-dm.org/shinnn/rimraf-promise/dev-status.svg)](https://david-dm.org/shinnn/rimraf-promise#info=devDependencies)
 
 [Promises/A+][promise] version of [rimraf][rimraf]:
 
