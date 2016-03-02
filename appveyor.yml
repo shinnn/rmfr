@@ -2,7 +2,7 @@ shallow_clone: true
 version: '{build}'
 skip_tags: true
 install:
-  - ps: Install-Product node 4
+  - ps: Install-Product node 5
   - npm install
 build: off
 test_script: node --strong_mode --throw-deprecation --track-heap-objects test.js
