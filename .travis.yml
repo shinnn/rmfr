@@ -1,6 +1,6 @@
 sudo: false
 language: node_js
-node_js: stable
+node_js: node
 after_script:
   - npm install istanbul-coveralls
   - npm run-script coverage
