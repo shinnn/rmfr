@@ -1,6 +1,6 @@
 {
   "name": "rmfr",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Node implementation of `rm -fr` – recursive removal of files and directories",
   "repository": "shinnn/rmfr",
   "author": {
