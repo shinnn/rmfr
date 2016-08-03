@@ -1,20 +1,18 @@
-# rimraf-promise
+# rmfr
 
-[![NPM version](https://img.shields.io/npm/v/rimraf-promise.svg)](https://www.npmjs.com/package/rimraf-promise)
-[![Build Status](https://travis-ci.org/shinnn/rimraf-promise.svg?branch=master)](https://travis-ci.org/shinnn/rimraf-promise)
-[![Build status](https://ci.appveyor.com/api/projects/status/sa0vd3nhfiupeu7h?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/rimraf-promise)
-[![Coverage Status](https://img.shields.io/coveralls/shinnn/rimraf-promise.svg)](https://coveralls.io/r/shinnn/rimraf-promise)
-[![Dependency Status](https://david-dm.org/shinnn/rimraf-promise.svg)](https://david-dm.org/shinnn/rimraf-promise)
-[![devDependency Status](https://david-dm.org/shinnn/rimraf-promise/dev-status.svg)](https://david-dm.org/shinnn/rimraf-promise#info=devDependencies)
+[![NPM version](https://img.shields.io/npm/v/rmfr.svg)](https://www.npmjs.com/package/rmfr)
+[![Build Status](https://travis-ci.org/shinnn/rmfr.svg?branch=master)](https://travis-ci.org/shinnn/rmfr)
+[![Build status](https://ci.appveyor.com/api/projects/status/afcmk50xuig9jfs7/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/rmfr/branch/master)
+[![Coverage Status](https://coveralls.io/repos/github/shinnn/rmfr/badge.svg?branch=master)](https://coveralls.io/github/shinnn/rmfr?branch=master)
+[![Dependency Status](https://david-dm.org/shinnn/rmfr.svg)](https://david-dm.org/shinnn/rmfr)
+[![devDependency Status](https://david-dm.org/shinnn/rmfr/dev-status.svg)](https://david-dm.org/shinnn/rmfr#info=devDependencies)
 
-[Promises/A+][promise] version of [rimraf][rimraf]:
-
-> `rm -rf` for node.
+[Node](https://nodejs.org/) implementation of `rm -fr` – recursive removal of files and directories
 
 ```javascript
-const rimrafPromise = require('rimraf-promise');
+const rmfr = require('rmfr');
 
-rimrafPromise('path/should/be/removed')
+rmfr('path/to/target')
 .then(() => console.log('File has been removed successfully.'))
 .catch(console.error);
 ```
@@ -24,37 +22,42 @@ rimrafPromise('path/should/be/removed')
 [Use npm.](https://docs.npmjs.com/cli/install)
 
 ```
-npm install rimraf-promise
+npm install rmfr
 ```
 
 ## API
 
 ```javascript
-const rimrafPromise = require('rimraf-promise');
+const rmfr = require('rmfr');
 ```
 
-### rimrafPromise(*path* [, *options*])
+### rmfr(*path* [, *options*])
 
-*path*: `String` (a file/directory path or glob pattern)  
-*options*: `Object` (rimraf [options](https://github.com/isaacs/rimraf/blob/4d3d9b5f2ddbbaf4ee56be5f8bfecdd4e27f7b34/rimraf.js#L22-L38))  
-Return: `Object` ([Promise][promise])
+*path*: `String` (a file/directory path)  
+*options*: `Object`  
+Return: `Object` ([Promise](https://promisesaplus.com/))
 
-When it finish removing the target, it will be [*fulfilled*](https://promisesaplus.com/#point-26) with no arguments.
+When it finish removing a target, it will be [*fulfilled*](https://promisesaplus.com/#point-26) with no arguments.
 
-When it fails to remove the target, it will be [*rejected*](https://promisesaplus.com/#point-30) with an error as its first argument. [Here](https://github.com/isaacs/rimraf#api) is the details about how [rimraf][rimraf] handles its error.
+When it fails to remove a target, it will be [*rejected*](https://promisesaplus.com/#point-30) with an error as its first argument.
+
+#### Options
+
+All [`rimraf`](https://github.com/isaacs/rimraf) [options](https://github.com/isaacs/rimraf#options) are available, with small differences:
+
+* `glob` option defaults to `false`.
+  * If you want to specify targets using glob pattern, set `glob` option `true` or provide a [`node-glob` option](https://github.com/isaacs/node-glob#options).
+* `unlink`, `chmod`, `stat`, `lstat`, `rmdir` and `readdir` options default to the corresponding [`graceful-fs`](https://github.com/isaacs/node-graceful-fs) methods.
 
 ```javascript
-const rirmafPromise = require('rimraf-promise');
+const rmfr = require('rmfr');
 
-const onFulfilled = () => console.log('Done.');
-const onRejected = err => console.error(err);
-
-rirmafPromise('path/to/file').then(onFulfilled, onRejected);
+rmfr('inde*.js'); // doesn't remove `./index.js`
+rmfr('inde*.js', {glob: true}); // removes `./index.js`
 ```
 
 ## License
 
-[The Unlicense](./LICENSE)
+Copyright (c) 2016 [Shinnosuke Watanabe](https://github.com/shinnn)
 
-[rimraf]: https://github.com/isaacs/rimraf
-[promise]: https://promisesaplus.com/
+Licensed under [the MIT License](./LICENSE).

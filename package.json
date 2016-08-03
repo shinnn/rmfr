@@ -1,14 +1,14 @@
 {
-  "name": "rimraf-promise",
-  "version": "2.0.0",
-  "description": "Promises/A+ version of rimraf",
-  "repository": "shinnn/rimraf-promise",
+  "name": "rmfr",
+  "version": "0.0.0",
+  "description": "Node implementation of `rm -fr` – recursive removal of files and directories",
+  "repository": "shinnn/rmfr",
   "author": {
     "name": "Shinnosuke Watanabe",
     "url": "https://github.com/shinnn"
   },
   "scripts": {
-    "pretest": "eslint --config @shinnn/node index.js test.js",
+    "pretest": "eslint --fix --config @shinnn/node index.js test.js",
     "test": "node --strong_mode --throw-deprecation --track-heap-objects test.js",
     "coverage": "istanbul cover --strong_mode test.js"
   },
@@ -33,13 +33,14 @@
     "thenable"
   ],
   "dependencies": {
-    "rimraf": "^2.4.3"
+    "rimraf": "^2.5.4"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node": "^1.0.1",
-    "eslint": "^1.7.1",
-    "istanbul": "^0.4.0",
-    "path-exists": "^2.0.0",
-    "tape": "^4.2.1"
+    "@shinnn/eslint-config-node": "^3.0.0",
+    "eslint": "^3.2.2",
+    "istanbul": "^0.4.4",
+    "path-exists": "^3.0.0",
+    "tape": "^4.6.0",
+    "write-file-atomically": "^1.0.0"
   }
 }

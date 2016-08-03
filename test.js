@@ -1,38 +1,73 @@
 'use strong';
 
-const fs = require('fs');
-
 const pathExists = require('path-exists');
-const rimrafPromise = require('./');
+const rmfr = require('.');
 const test = require('tape');
+const writeFileAtomically = require('write-file-atomically');
 
-test('rimrafPromise()', t => {
-  t.plan(7);
+test('rmfr()', t => {
+  t.plan(9);
 
-  fs.writeFileSync('foo', '');
-
-  rimrafPromise('foo').then(res => {
-    pathExists('foo').then(exists => t.notOk(exists, 'should remove a file.'));
-    t.strictEqual(res, undefined, 'should pass no value to the onFulfilled function.');
+  writeFileAtomically('tmp_file_for_test', '', () => {
+    rmfr('tmp_file_for_test').then(res => {
+      pathExists('tmp_file_for_test').then(exists => t.notOk(exists, 'should remove a file.'));
+      t.strictEqual(res, undefined, 'should pass no value to the onFulfilled function.');
+    });
   }).catch(t.fail);
 
-  rimrafPromise('inde*.js', {disableGlob: true}).then(() => {
-    pathExists('index.js').then(exists => t.ok(exists, 'should support rimraf options.'));
+  rmfr('inde*.js', {}).then(() => {
+    pathExists('index.js').then(exists => t.ok(exists, 'should disable `glob` option by default.'));
   }).catch(t.fail);
 
-  rimrafPromise('/'.repeat(Number(process.platform !== 'win32')), null).then(t.fail, err => {
-    t.ok(err, 'should be rejected when rimraf cannot remove the target.');
+  rmfr('.gitignore', {unlink: (path, cb) => cb(new Error('Ouch'))}).then(t.fail, err => {
+    t.strictEqual(
+      err.message,
+      'Ouch',
+      'should fail when an error occurs while calling rimraf.'
+    );
   }).catch(t.fail);
 
-  rimrafPromise().then(t.fail, err => {
-    t.ok(/missing path/.test(err), 'should be rejected when it takes no arguments.');
+  rmfr().then(t.fail, err => {
+    t.strictEqual(
+      err.message,
+      'rimraf: missing path',
+      'should fail when it takes no arguments.'
+    );
   }).catch(t.fail);
 
-  rimrafPromise(['1'], undefined).then(t.fail, err => {
-    t.ok(/should be a string/.test(err), 'should be rejected when the first argument is not a string.');
+  rmfr(['1'], {glob: true}).then(t.fail, err => {
+    t.strictEqual(
+      err.message,
+      'rimraf: path should be a string',
+      'should fail when the first argument is not a string.'
+    );
   }).catch(t.fail);
 
-  rimrafPromise('foo', false).then(t.fail, err => {
-    t.ok(/missing options/.test(err), 'should be rejected when it takes the non-object second argument.');
+  rmfr('foo', 1).then(t.fail, err => {
+    t.ok(
+      err.message.includes('1 is not an object'),
+      'should fail when the second argument is not an object.'
+    );
+  }).catch(t.fail);
+
+  rmfr('foo', {chmod: new Set(['a'])}).then(t.fail, err => {
+    t.strictEqual(
+      err.name,
+      'TypeError',
+      'should fail when it takes an invalid option.'
+    );
+  }).catch(t.fail);
+
+  rmfr('foo', {
+    maxBusyTries: 'foo',
+    emfileWait: 'bar',
+    glob: 'baz',
+    disableGlob: 'qux'
+  }).then(t.fail, err => {
+    t.strictEqual(
+      err.name,
+      'TypeError',
+      'should fail when it takes invalid options.'
+    );
   }).catch(t.fail);
 });
