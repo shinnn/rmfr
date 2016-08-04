@@ -33,6 +33,7 @@
     "thenable"
   ],
   "dependencies": {
+    "graceful-fs": "^4.1.5",
     "rimraf": "^2.5.4"
   },
   "devDependencies": {
