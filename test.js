@@ -1,4 +1,4 @@
-'use strong';
+'use strict';
 
 const pathExists = require('path-exists');
 const rmfr = require('.');

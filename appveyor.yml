@@ -5,4 +5,4 @@ install:
   - ps: Install-Product node Stable
   - npm install
 build: off
-test_script: node --strong_mode --throw-deprecation --track-heap-objects test.js
+test_script: node --throw-deprecation --track-heap-objects test.js

@@ -9,8 +9,8 @@
   },
   "scripts": {
     "pretest": "eslint --fix --config @shinnn/node index.js test.js",
-    "test": "node --strong_mode --throw-deprecation --track-heap-objects test.js",
-    "coverage": "istanbul cover --strong_mode test.js"
+    "test": "node --throw-deprecation --track-heap-objects test.js",
+    "coverage": "istanbul cover test.js"
   },
   "license": "MIT",
   "files": [
