@@ -43,11 +43,11 @@ module.exports = function rmfr(filePath, options) {
     readdir: fs.readdir
   }, options);
 
-  fsMethods.forEach(method => {
+  for (const method of fsMethods) {
     if (typeof options[method] !== 'function') {
       errors.push(`\`${method}\` option must be a function, but got ${inspect(options[method])} (${typeof options[method]}).`);
     }
-  });
+  }
 
   if (options.maxBusyTries !== undefined && typeof options.maxBusyTries !== 'number') {
     errors.push(`\`maxBusyTries\` option must be a number, but got ${inspect(options.maxBusyTries)} (${typeof options.maxBusyTries}).`);
