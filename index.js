@@ -16,7 +16,8 @@ const fsMethods = [
 const defaultGlobOptions = {
   nosort: true,
   silent: true,
-  absolute: true // Remove this line when isaacs/rimraf#133 is merged
+  // Remove this line when isaacs/rimraf#133 is merged
+  absolute: true
 };
 const RIMRAF_DOC_URL = 'https://github.com/isaacs/rimraf#options';
 
