@@ -39,14 +39,12 @@ module.exports = function rmfr(filePath, options) {
     glob: false,
     unlink: fs.unlink,
     chmod: fs.chmod,
-    stat: fs.stat,
-    lstat: fs.lstat,
     rmdir: fs.rmdir,
     readdir: fs.readdir
   }, options);
 
   for (const method of fsMethods) {
-    if (typeof options[method] !== 'function') {
+    if (options[method] !== undefined && typeof options[method] !== 'function') {
       errors.push(`\`${method}\` option must be a function, but got ${inspect(options[method])} (${typeof options[method]}).`);
     }
   }
@@ -73,7 +71,7 @@ module.exports = function rmfr(filePath, options) {
     return Promise.reject(new TypeError(`${errors[0]} ${RIMRAF_DOC_URL}`));
   }
 
-  if (errors.length > 1) {
+  if (errors.length !== 0) {
     return Promise.reject(new TypeError(`There was ${errors.length} errors in rimraf options you provided:
 ${errors.map(error => '  * ' + error).join('\n')}
 Read ${RIMRAF_DOC_URL} for the details.`));

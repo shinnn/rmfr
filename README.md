@@ -33,9 +33,9 @@ const rmfr = require('rmfr');
 
 ### rmfr(*path* [, *options*])
 
-*path*: `String` (a file/directory path)  
+*path*: `string` (a file/directory path)  
 *options*: `Object`  
-Return: `Object` ([Promise](https://promisesaplus.com/))
+Return: [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 
 When it finish removing a target, it will be [*fulfilled*](https://promisesaplus.com/#point-26) with no arguments.
 
@@ -47,7 +47,7 @@ All [`rimraf`](https://github.com/isaacs/rimraf) [options](https://github.com/is
 
 * `glob` option defaults to `false`.
   * If you want to specify targets using glob pattern, set `glob` option `true` or provide a [`node-glob` option](https://github.com/isaacs/node-glob#options).
-* `unlink`, `chmod`, `stat`, `lstat`, `rmdir` and `readdir` options default to the corresponding [`graceful-fs`](https://github.com/isaacs/node-graceful-fs) methods.
+* `unlink`, `chmod`, `rmdir` and `readdir` options default to the corresponding [`graceful-fs`](https://github.com/isaacs/node-graceful-fs) methods.
 
 ```javascript
 const rmfr = require('rmfr');
