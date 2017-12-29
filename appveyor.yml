@@ -1,8 +1,9 @@
+image: Visual Studio 2017
+platform: x64
 shallow_clone: true
-version: '{build}'
 skip_tags: true
 install:
-  - ps: Install-Product node Stable
+  - ps: Install-Product node Stable x64
   - npm install
 build: off
-test_script: node --throw-deprecation --track-heap-objects test.js
+test_script: node test.js
