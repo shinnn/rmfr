@@ -1,50 +1,44 @@
 {
-  "name": "rmfr",
-  "version": "1.0.3",
-  "description": "Node implementation of `rm -fr` – recursive removal of files and directories",
-  "repository": "shinnn/rmfr",
-  "author": {
-    "name": "Shinnosuke Watanabe",
-    "url": "https://github.com/shinnn"
-  },
-  "scripts": {
-    "pretest": "eslint --fix --format=codeframe index.js test.js",
-    "test": "node --throw-deprecation --track-heap-objects test.js",
-    "coverage": "istanbul cover test.js"
-  },
-  "license": "MIT",
-  "files": [
-    "index.js"
-  ],
-  "keywords": [
-    "rimraf",
-    "rm",
-    "rmdir",
-    "unlink",
-    "remove",
-    "clean",
-    "recursive",
-    "glob",
-    "file",
-    "directory",
-    "promise",
-    "promisified",
-    "then",
-    "thenable"
-  ],
-  "dependencies": {
-    "graceful-fs": "^4.1.5",
-    "rimraf": "^2.5.4"
-  },
-  "devDependencies": {
-    "@shinnn/eslint-config-node": "^3.0.0",
-    "eslint": "^3.14.0",
-    "istanbul": "^0.4.5",
-    "path-exists": "^3.0.0",
-    "tape": "^4.6.3",
-    "write-file-atomically": "^1.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@shinnn/node"
-  }
+	"name": "rmfr",
+	"version": "1.0.3",
+	"description": "Node.js implementation of `rm -fr` – recursive removal of files and directories",
+	"repository": "shinnn/rmfr",
+	"author": "Shinnosuke Watanabe (https://github.com/shinnn)",
+	"scripts": {
+		"pretest": "eslint --fix --format=codeframe index.js test.js",
+		"test": "nyc --reporter=html --reporter=text node test.js"
+	},
+	"license": "MIT",
+	"files": [
+		"index.js"
+	],
+	"keywords": [
+		"rimraf",
+		"rm",
+		"rmdir",
+		"unlink",
+		"remove",
+		"clean",
+		"recursive",
+		"glob",
+		"file",
+		"directory",
+		"promise",
+		"promisified",
+		"then",
+		"thenable"
+	],
+	"dependencies": {
+		"graceful-fs": "^4.1.11",
+		"rimraf": "^2.6.2"
+	},
+	"devDependencies": {
+		"@shinnn/eslint-config-node": "^5.0.0",
+		"eslint": "^4.14.0",
+		"nyc": "^11.4.1",
+		"tape": "^4.8.0"
+	},
+	"eslintConfig": {
+		"extends": "@shinnn/node"
+	}
 }
