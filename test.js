@@ -71,7 +71,7 @@ test('rmfr()', async t => {
 		t.fail('Unexpectedly succeeded.');
 	} catch ({message}) {
 		t.ok(
-			message.includes('1 is not an object'),
+			/^Expected an option object passed to rimraf.*, but got 1 \(number\)\./.test(message),
 			'should fail when the second argument is not an object.'
 		);
 	}

@@ -1,8 +1,7 @@
 'use strict';
 
-const inspect = require('util').inspect;
-
 const fs = require('graceful-fs');
+const inspectWithKind = require('inspect-with-kind');
 const rimraf = require('rimraf');
 
 const fsMethods = [
@@ -24,8 +23,9 @@ const RIMRAF_DOC_URL = 'https://github.com/isaacs/rimraf#options';
 module.exports = function rmfr(filePath, options) {
 	if (options) {
 		if (typeof options !== 'object') {
-			return Promise.reject(new TypeError(`${inspect(options)
-			} is not an object. Expected an option object passed to rimraf ${RIMRAF_DOC_URL}.`));
+			return Promise.reject(new TypeError(`Expected an option object passed to rimraf (${RIMRAF_DOC_URL}), but got ${
+				inspectWithKind(options)
+			}.`));
 		}
 	} else {
 		options = {};
@@ -43,26 +43,36 @@ module.exports = function rmfr(filePath, options) {
 
 	for (const method of fsMethods) {
 		if (options[method] !== undefined && typeof options[method] !== 'function') {
-			errors.push(`\`${method}\` option must be a function, but got ${inspect(options[method])} (${typeof options[method]}).`);
+			errors.push(`\`${method}\` option must be a function, but got ${
+				inspectWithKind(options[method])
+			}.`);
 		}
 	}
 
 	if (options.maxBusyTries !== undefined && typeof options.maxBusyTries !== 'number') {
-		errors.push(`\`maxBusyTries\` option must be a number, but got ${inspect(options.maxBusyTries)} (${typeof options.maxBusyTries}).`);
+		errors.push(`\`maxBusyTries\` option must be a number, but got ${
+			inspectWithKind(options.maxBusyTries)
+		}.`);
 	}
 
 	if (options.emfileWait !== undefined && typeof options.emfileWait !== 'number') {
-		errors.push(`\`emfileWait\` option must be a number, but got ${inspect(options.emfileWait)} (${typeof options.emfileWait}).`);
+		errors.push(`\`emfileWait\` option must be a number, but got ${
+			inspectWithKind(options.emfileWait)
+		}.`);
 	}
 
 	if (options.glob === true) {
 		options.glob = defaultGlobOptions;
 	} else if (options.glob !== false && typeof options.glob !== 'object') {
-		errors.push(`\`glob\` option must be an object passed to \`glob\` or a Boolean value, but got ${inspect(options.glob)} (${typeof options.glob}).`);
+		errors.push(`\`glob\` option must be an object passed to \`glob\` or a Boolean value, but got ${
+			inspectWithKind(options.glob)
+		}.`);
 	}
 
 	if (options.disableGlob !== undefined && typeof options.disableGlob !== 'boolean') {
-		errors.push(`\`disableGlob\` option must be a boolean, but got ${inspect(options.disableGlob)} (${typeof options.disableGlob}).`);
+		errors.push(`\`disableGlob\` option must be a boolean, but got ${
+			inspectWithKind(options.disableGlob)
+		}.`);
 	}
 
 	if (errors.length === 1) {
