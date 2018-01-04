@@ -103,5 +103,20 @@ test('rmfr()', async t => {
 		);
 	}
 
+	try {
+		await rmfr('foo', {
+			glob: {
+				ignore: new WeakSet()
+			}
+		});
+		t.fail('Unexpectedly succeeded.');
+	} catch ({message}) {
+		t.equal(
+			message,
+			'node-glob expected `ignore` option to be an array or string, but got WeakSet {}.',
+			'should fail when it takes invalid glob options.'
+		);
+	}
+
 	t.end();
 });

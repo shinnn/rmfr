@@ -1,5 +1,6 @@
 'use strict';
 
+const assertValidGlobOpts = require('assert-valid-glob-opts');
 const fs = require('graceful-fs');
 const inspectWithKind = require('inspect-with-kind');
 const rimraf = require('rimraf');
@@ -63,7 +64,9 @@ module.exports = function rmfr(filePath, options) {
 
 	if (options.glob === true) {
 		options.glob = defaultGlobOptions;
-	} else if (options.glob !== false && typeof options.glob !== 'object') {
+	} else if (typeof options.glob === 'object') {
+		assertValidGlobOpts(options.glob);
+	} else if (options.glob !== false) {
 		errors.push(`\`glob\` option must be an object passed to \`glob\` or a Boolean value, but got ${
 			inspectWithKind(options.glob)
 		}.`);
