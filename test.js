@@ -2,16 +2,62 @@
 
 const {promisify} = require('util');
 
-const {lstat, writeFile} = require('graceful-fs');
+const {lstat, mkdir, writeFile} = require('graceful-fs');
 const rmfr = require('.');
 const test = require('tape');
 
 const promisifiedLstat = promisify(lstat);
+const promisifiedMkdir = promisify(mkdir);
 const promisifiedWriteFile = promisify(writeFile);
 
 test('rmfr()', async t => {
-	await promisifiedWriteFile('tmp_file_for_test', '');
-	await rmfr('tmp_file_for_test');
+	await Promise.all([
+		promisifiedWriteFile('tmp_file', ''),
+		promisifiedMkdir('tmp_dir')
+	]);
+
+	await rmfr('tmp_file');
+
+	try {
+		await promisifiedLstat('tmp_file');
+		t.fail('File not removed.');
+	} catch ({code}) {
+		t.equal(
+			code,
+			'ENOENT',
+			'should remove a file.'
+		);
+	}
+
+	await rmfr('tmp_d*', {});
+
+	t.ok(
+		(await promisifiedLstat('tmp_dir')).isDirectory(),
+		'should disable `glob` option by default.'
+	);
+
+	await rmfr('../{tmp_d*,test.js}', {
+		glob: {
+			cwd: 'node_modules',
+			ignore: __filename
+		}
+	});
+
+	try {
+		await promisifiedLstat('../{tmp_d*,package.json}');
+		t.fail('Directory not removed.');
+	} catch ({code}) {
+		t.equal(
+			code,
+			'ENOENT',
+			'should support glob.'
+		);
+	}
+
+	t.ok(
+		(await promisifiedLstat(__filename)).isFile(),
+		'should support glob options.'
+	);
 
 	try {
 		await promisifiedLstat('tmp_file_for_test');
@@ -23,13 +69,6 @@ test('rmfr()', async t => {
 			'should remove a file.'
 		);
 	}
-
-	await rmfr('inde*.js', {});
-
-	t.ok(
-		await promisifiedLstat('index.js'),
-		'should disable `glob` option by default.'
-	);
 
 	const error = new Error('_');
 

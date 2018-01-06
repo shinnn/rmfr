@@ -15,9 +15,7 @@ const fsMethods = [
 ];
 const defaultGlobOptions = {
 	nosort: true,
-	silent: true,
-	// Remove this line when isaacs/rimraf#133 is merged
-	absolute: true
+	silent: true
 };
 const RIMRAF_DOC_URL = 'https://github.com/isaacs/rimraf#options';
 
@@ -66,6 +64,14 @@ module.exports = function rmfr(filePath, options) {
 		options.glob = defaultGlobOptions;
 	} else if (typeof options.glob === 'object') {
 		assertValidGlobOpts(options.glob);
+
+		options.glob = Object.assign({
+			nosort: true,
+			silent: true
+		}, options.glob, {
+			// Remove this line when isaacs/rimraf#133 is merged
+			absolute: options.glob.cwd !== undefined
+		});
 	} else if (options.glob !== false) {
 		errors.push(`\`glob\` option must be an object passed to \`glob\` or a Boolean value, but got ${
 			inspectWithKind(options.glob)
