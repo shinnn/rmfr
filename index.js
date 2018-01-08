@@ -1,11 +1,15 @@
 'use strict';
 
+const resolve = require('path').resolve;
+
 const assertValidGlobOpts = require('assert-valid-glob-opts');
 const fs = require('graceful-fs');
+const hasMagic = require('glob').hasMagic;
 const inspectWithKind = require('inspect-with-kind');
 const rimraf = require('rimraf');
 
-const fsMethods = [
+const RIMRAF_DOC_URL = 'https://github.com/isaacs/rimraf#options';
+const SUPPORTED_FS_METHODS = [
 	'unlink',
 	'chmod',
 	'stat',
@@ -17,7 +21,16 @@ const defaultGlobOptions = {
 	nosort: true,
 	silent: true
 };
-const RIMRAF_DOC_URL = 'https://github.com/isaacs/rimraf#options';
+const promisifiedRimraf = (filePath, options) => new Promise((pResolve, pReject) => {
+	rimraf(filePath, options, err => {
+		if (err) {
+			pReject(err);
+			return;
+		}
+
+		pResolve();
+	});
+});
 
 module.exports = function rmfr(filePath, options) {
 	if (options) {
@@ -40,7 +53,7 @@ module.exports = function rmfr(filePath, options) {
 		readdir: fs.readdir
 	}, options);
 
-	for (const method of fsMethods) {
+	for (const method of SUPPORTED_FS_METHODS) {
 		if (options[method] !== undefined && typeof options[method] !== 'function') {
 			errors.push(`\`${method}\` option must be a function, but got ${
 				inspectWithKind(options[method])
@@ -60,27 +73,36 @@ module.exports = function rmfr(filePath, options) {
 		}.`);
 	}
 
+	if (options.disableGlob !== undefined && typeof options.disableGlob !== 'boolean') {
+		errors.push(`\`disableGlob\` option must be a boolean, but got ${
+			inspectWithKind(options.disableGlob)
+		}.`);
+	}
+
 	if (options.glob === true) {
 		options.glob = defaultGlobOptions;
 	} else if (typeof options.glob === 'object') {
 		assertValidGlobOpts(options.glob);
+
+		const hasCwdOption = options.glob.cwd !== undefined;
 
 		options.glob = Object.assign({
 			nosort: true,
 			silent: true
 		}, options.glob, {
 			// Remove this line when isaacs/rimraf#133 is merged
-			absolute: options.glob.cwd !== undefined
+			absolute: hasCwdOption
 		});
+
+		if (errors.length === 0 && hasCwdOption && !hasMagic(filePath, options.glob)) {
+			// Bypass https://github.com/isaacs/rimraf/blob/v2.6.2/rimraf.js#L62
+			return promisifiedRimraf(resolve(options.glob.cwd, filePath), Object.assign({}, options, {
+				disableGlob: true
+			}));
+		}
 	} else if (options.glob !== false) {
 		errors.push(`\`glob\` option must be an object passed to \`glob\` or a Boolean value, but got ${
 			inspectWithKind(options.glob)
-		}.`);
-	}
-
-	if (options.disableGlob !== undefined && typeof options.disableGlob !== 'boolean') {
-		errors.push(`\`disableGlob\` option must be a boolean, but got ${
-			inspectWithKind(options.disableGlob)
 		}.`);
 	}
 
@@ -94,14 +116,5 @@ ${errors.map(error => `  * ${error}`).join('\n')}
 Read ${RIMRAF_DOC_URL} for the details.`));
 	}
 
-	return new Promise((resolve, reject) => {
-		rimraf(filePath, options, err => {
-			if (err) {
-				reject(err);
-				return;
-			}
-
-			resolve();
-		});
-	});
+	return promisifiedRimraf(filePath, options);
 };

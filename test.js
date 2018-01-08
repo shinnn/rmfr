@@ -70,6 +70,17 @@ test('rmfr()', async t => {
 		);
 	}
 
+	await rmfr('test.js', {
+		glob: {
+			cwd: 'this/directory/does/not/exist'
+		}
+	});
+
+	t.ok(
+		(await promisifiedLstat(__filename)).isFile(),
+		'should consider `cwd` even if the path contains no special characters.'
+	);
+
 	const error = new Error('_');
 
 	try {
