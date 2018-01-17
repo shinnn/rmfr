@@ -100,8 +100,19 @@ test('rmfr()', async t => {
 	} catch ({message}) {
 		t.equal(
 			message,
-			'rimraf: missing path',
+			'Expected 1 or 2 arguments (<string>[, <Object>]), but got no arguments.',
 			'should fail when it takes no arguments.'
+		);
+	}
+
+	try {
+		await rmfr('<', {o: 'O'}, '/');
+		t.fail('Unexpectedly succeeded.');
+	} catch ({message}) {
+		t.equal(
+			message,
+			'Expected 1 or 2 arguments (<string>[, <Object>]), but got 3 arguments.',
+			'should fail when it takes too many arguments.'
 		);
 	}
 
