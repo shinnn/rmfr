@@ -32,13 +32,13 @@ const promisifiedRimraf = (filePath, options) => new Promise((pResolve, pReject)
 	});
 });
 
-module.exports = function rmfr(...args) {
+module.exports = async function rmfr(...args) {
 	const argLen = args.length;
 
 	if (argLen !== 1 && argLen !== 2) {
-		return Promise.reject(new RangeError(`Expected 1 or 2 arguments (<string>[, <Object>]), but got ${
+		throw new RangeError(`Expected 1 or 2 arguments (<string>[, <Object>]), but got ${
 			argLen === 0 ? 'no' : argLen
-		} arguments.`));
+		} arguments.`);
 	}
 
 	const defaultOptions = {
@@ -56,9 +56,9 @@ module.exports = function rmfr(...args) {
 	const [path] = args;
 
 	if (typeof args[1] !== 'object') {
-		return Promise.reject(new TypeError(`Expected an option object passed to rimraf (${RIMRAF_DOC_URL}), but got ${
+		throw new TypeError(`Expected an option object passed to rimraf (${RIMRAF_DOC_URL}), but got ${
 			inspectWithKind(args[1])
-		}.`));
+		}.`);
 	}
 
 	const options = Object.assign(defaultOptions, args[1]);
@@ -117,13 +117,13 @@ module.exports = function rmfr(...args) {
 	}
 
 	if (errors.length === 1) {
-		return Promise.reject(new TypeError(`${errors[0]} ${RIMRAF_DOC_URL}`));
+		throw new TypeError(`${errors[0]} ${RIMRAF_DOC_URL}`);
 	}
 
 	if (errors.length !== 0) {
-		return Promise.reject(new TypeError(`There was ${errors.length} errors in rimraf options you provided:
+		throw new TypeError(`There was ${errors.length} errors in rimraf options you provided:
 ${errors.map(error => `  * ${error}`).join('\n')}
-Read ${RIMRAF_DOC_URL} for the details.`));
+Read ${RIMRAF_DOC_URL} for the details.`);
 	}
 
 	return promisifiedRimraf(path, options);
