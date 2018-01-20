@@ -1,6 +1,6 @@
 {
 	"name": "rmfr",
-	"version": "2.0.0-0",
+	"version": "2.0.0-1",
 	"description": "Node.js implementation of `rm -fr` – recursive removal of files and directories",
 	"repository": "shinnn/rmfr",
 	"author": "Shinnosuke Watanabe (https://github.com/shinnn)",
@@ -29,7 +29,7 @@
 		"thenable"
 	],
 	"dependencies": {
-		"assert-valid-glob-opts": "^0.2.0",
+		"assert-valid-glob-opts": "^1.0.0",
 		"glob": "^7.1.2",
 		"graceful-fs": "^4.1.11",
 		"inspect-with-kind": "^1.0.4",
@@ -37,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@shinnn/eslint-config-node": "^5.0.0",
-		"eslint": "^4.15.0",
+		"eslint": "^4.16.0",
 		"nyc": "^11.4.1",
 		"tape": "^4.8.0"
 	},
