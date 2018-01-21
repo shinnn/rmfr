@@ -1,5 +1,6 @@
 'use strict';
 
+const {promisify} = require('util');
 const {resolve} = require('path');
 
 const assertValidGlobOpts = require('assert-valid-glob-opts');
@@ -21,16 +22,7 @@ const defaultGlobOptions = {
 	nosort: true,
 	silent: true
 };
-const promisifiedRimraf = (filePath, options) => new Promise((pResolve, pReject) => {
-	rimraf(filePath, options, err => {
-		if (err) {
-			pReject(err);
-			return;
-		}
-
-		pResolve();
-	});
-});
+const promisifiedRimraf = promisify(rimraf);
 
 module.exports = async function rmfr(...args) {
 	const argLen = args.length;
