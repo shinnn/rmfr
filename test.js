@@ -152,8 +152,7 @@ test('rmfr()', async t => {
 		await rmfr('foo', {
 			maxBusyTries: 'foo',
 			emfileWait: 'bar',
-			glob: 'baz',
-			disableGlob: 'qux'
+			glob: 'baz'
 		});
 		t.fail('Unexpectedly succeeded.');
 	} catch ({name}) {
@@ -161,6 +160,18 @@ test('rmfr()', async t => {
 			name,
 			'TypeError',
 			'should fail when it takes invalid options.'
+		);
+	}
+
+	try {
+		await rmfr('foo', {disableGlob: true});
+		t.fail('Unexpectedly succeeded.');
+	} catch ({message}) {
+		t.equal(
+			message,
+			'rmfr doesn\'t support `disableGlob` option, but a value true (boolean) was provided. ' +
+			'rmfr disables glob feature by default. https://github.com/isaacs/rimraf#options',
+			'should fail when `disableGlob` option is provided.'
 		);
 	}
 

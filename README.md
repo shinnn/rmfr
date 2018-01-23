@@ -39,10 +39,10 @@ When it fails to remove a target, it will be [*rejected*](https://promisesaplus.
 
 #### Options
 
-All [`rimraf`](https://github.com/isaacs/rimraf) [options](https://github.com/isaacs/rimraf#options) are available, with small differences:
+All [`rimraf`](https://github.com/isaacs/rimraf) [options](https://github.com/isaacs/rimraf#options) except for `disableGlob` are available, with some differences:
 
 * `glob` option defaults to `false`.
-  * If you want to specify targets using glob pattern, set `glob` option `true` or provide a [`node-glob` option](https://github.com/isaacs/node-glob#options).
+  * If you want to specify targets using glob pattern, set `glob` option `true` or provide a [`node-glob` options object](https://github.com/isaacs/node-glob#options).
 * `unlink`, `chmod`, `rmdir` and `readdir` options default to the corresponding [`graceful-fs`](https://github.com/isaacs/node-graceful-fs) methods.
 
 ```javascript
@@ -54,4 +54,4 @@ rmfr('inde*.js', {glob: true}); // removes `./index.js`
 
 ## License
 
-[ISC License](./LICENSE) © 2017 Shinnosuke Watanabe
+[ISC License](./LICENSE) © 2017 - 2018 Shinnosuke Watanabe

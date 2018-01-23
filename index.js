@@ -18,10 +18,6 @@ const SUPPORTED_FS_METHODS = [
 	'rmdir',
 	'readdir'
 ];
-const defaultGlobOptions = {
-	nosort: true,
-	silent: true
-};
 const promisifiedRimraf = promisify(rimraf);
 
 module.exports = async function rmfr(...args) {
@@ -76,14 +72,17 @@ module.exports = async function rmfr(...args) {
 		}.`);
 	}
 
-	if (options.disableGlob !== undefined && typeof options.disableGlob !== 'boolean') {
-		errors.push(`\`disableGlob\` option must be a boolean, but got ${
+	if (options.disableGlob !== undefined) {
+		errors.push(`rmfr doesn't support \`disableGlob\` option, but a value ${
 			inspectWithKind(options.disableGlob)
-		}.`);
+		} was provided. rmfr disables glob feature by default.`);
 	}
 
 	if (options.glob === true) {
-		options.glob = defaultGlobOptions;
+		options.glob = {
+			nosort: true,
+			silent: true
+		};
 	} else if (typeof options.glob === 'object') {
 		assertValidGlobOpts(options.glob);
 		const hasCwdOption = options.glob.cwd !== undefined;
