@@ -59,17 +59,6 @@ test('rmfr()', async t => {
 		'should support glob options.'
 	);
 
-	try {
-		await promisifiedLstat('tmp_file_for_test');
-		t.fail('File not removed.');
-	} catch ({code}) {
-		t.equal(
-			code,
-			'ENOENT',
-			'should remove a file.'
-		);
-	}
-
 	await rmfr('test.js', {
 		glob: {
 			cwd: 'this/directory/does/not/exist'
@@ -164,13 +153,27 @@ test('rmfr()', async t => {
 	}
 
 	try {
+		await rmfr('foo', {
+			glob: {
+				stat: true
+			}
+		});
+		t.fail('Unexpectedly succeeded.');
+	} catch ({message}) {
+		t.equal(
+			message,
+			'rmfr doesn\'t support `stat` option in `glob` option, but got true (boolean).',
+			'should fail when it takes unsupported glob option.'
+		);
+	}
+
+	try {
 		await rmfr('foo', {disableGlob: true});
 		t.fail('Unexpectedly succeeded.');
 	} catch ({message}) {
 		t.equal(
 			message,
-			'rmfr doesn\'t support `disableGlob` option, but a value true (boolean) was provided. ' +
-			'rmfr disables glob feature by default. https://github.com/isaacs/rimraf#options',
+			'rmfr doesn\'t support `disableGlob` option, but a value true (boolean) was provided. rmfr disables glob feature by default.',
 			'should fail when `disableGlob` option is provided.'
 		);
 	}

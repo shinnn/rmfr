@@ -18,6 +18,10 @@ const SUPPORTED_FS_METHODS = [
 	'rmdir',
 	'readdir'
 ];
+const UNSUPPORTED_GLOB_OPTIONS = [
+	'mark',
+	'stat'
+];
 const promisifiedRimraf = promisify(rimraf);
 
 module.exports = async function rmfr(...args) {
@@ -78,19 +82,29 @@ module.exports = async function rmfr(...args) {
 		} was provided. rmfr disables glob feature by default.`);
 	}
 
+	const defaultGlobOptions = {
+		nosort: true,
+		silent: true
+	};
+
 	if (options.glob === true) {
-		options.glob = {
-			nosort: true,
-			silent: true
-		};
+		options.glob = defaultGlobOptions;
 	} else if (typeof options.glob === 'object') {
 		assertValidGlobOpts(options.glob);
 		const hasCwdOption = options.glob.cwd !== undefined;
 
-		options.glob = Object.assign({
-			nosort: true,
-			silent: true
-		}, options.glob, {
+		for (const unsupportedGlobOption of UNSUPPORTED_GLOB_OPTIONS) {
+			const val = options.glob[unsupportedGlobOption];
+
+			if (val) {
+				errors.push(`rmfr doesn't support \`${unsupportedGlobOption}\` option in \`glob\` option, but got ${
+					inspectWithKind(val)
+				}.`);
+			}
+		}
+
+
+		options.glob = Object.assign(defaultOptions, options.glob, {
 			// Remove this line when isaacs/rimraf#133 is merged
 			absolute: hasCwdOption
 		});
@@ -108,13 +122,13 @@ module.exports = async function rmfr(...args) {
 	}
 
 	if (errors.length === 1) {
-		throw new TypeError(`${errors[0]} ${RIMRAF_DOC_URL}`);
+		throw new TypeError(errors[0]);
 	}
 
 	if (errors.length !== 0) {
 		throw new TypeError(`There was ${errors.length} errors in rimraf options you provided:
 ${errors.map(error => `  * ${error}`).join('\n')}
-Read ${RIMRAF_DOC_URL} for the details.`);
+`);
 	}
 
 	return promisifiedRimraf(path, options);
