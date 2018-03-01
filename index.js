@@ -22,6 +22,10 @@ const UNSUPPORTED_GLOB_OPTIONS = [
 	'mark',
 	'stat'
 ];
+const FORCED_GLOB_OPTIONS = [
+	'nosort',
+	'nounique'
+];
 const promisifiedRimraf = promisify(rimraf);
 
 module.exports = async function rmfr(...args) {
@@ -84,6 +88,7 @@ module.exports = async function rmfr(...args) {
 
 	const defaultGlobOptions = {
 		nosort: true,
+		nounique: true,
 		silent: true
 	};
 
@@ -103,6 +108,13 @@ module.exports = async function rmfr(...args) {
 			}
 		}
 
+		for (const forcedGlobOption of FORCED_GLOB_OPTIONS) {
+			const val = options.glob[forcedGlobOption];
+
+			if (val === false) {
+				errors.push(`rmfr doesn't allow \`${forcedGlobOption}\` option in \`glob\` option to be disabled, but \`false\` was passed to it.`);
+			}
+		}
 
 		options.glob = Object.assign(defaultOptions, options.glob, {
 			// Remove this line when isaacs/rimraf#133 is merged

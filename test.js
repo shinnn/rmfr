@@ -168,6 +168,21 @@ test('rmfr()', async t => {
 	}
 
 	try {
+		await rmfr('foo', {
+			glob: {
+				nosort: false
+			}
+		});
+		t.fail('Unexpectedly succeeded.');
+	} catch ({message}) {
+		t.equal(
+			message,
+			'rmfr doesn\'t allow `nosort` option in `glob` option to be disabled, but `false` was passed to it.',
+			'should fail when the forcedly enabled option is disabled.'
+		);
+	}
+
+	try {
 		await rmfr('foo', {disableGlob: true});
 		t.fail('Unexpectedly succeeded.');
 	} catch ({message}) {
